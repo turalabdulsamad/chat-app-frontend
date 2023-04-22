@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from "../styled";
 import { StyledBack, Form, Label, Input, Button } from "../components/login/styled";
+import getUser from '../utils/Utils';
 
 
 const Login = () => {
@@ -15,7 +16,7 @@ const Login = () => {
             username: data.get('username'),
         };
         setFormData(formData);
-
+        getUser(formData)
         navigate(`/messages/username=${formData.username}`);
     }
 
