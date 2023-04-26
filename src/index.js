@@ -8,6 +8,7 @@ import {
 import Login from './routes/Login';
 import App from './App';
 import Messages from './routes/Messages';
+import Direct from './routes/Direct';
 
 
 const router = createBrowserRouter([
@@ -22,7 +23,11 @@ const router = createBrowserRouter([
   {
     path: "/messages/:username",
     element: <Messages />
-  }
+  },
+  {
+    path: "/direct/:username",
+    element: <Direct />
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

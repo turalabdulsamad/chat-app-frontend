@@ -1,4 +1,4 @@
-async function getUser(data) {
+const getUser = async (data) => {
     try {
         const response = await fetch(`http://localhost:3001/users/${data.username}`, {
             method: 'GET',
@@ -30,7 +30,24 @@ async function getUser(data) {
     } catch (error) {
         console.error(error);
     }
-
 }
 
-export default getUser;
+const getMessages = async (username) => {
+    try {
+        const response = await fetch(`http://localhost:3001/messages/${username.username}`,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+        const responseData = await response.json();
+        return responseData
+    }
+    catch (error) {
+        console.error(error)
+    }
+}
+
+export { getUser, getMessages };

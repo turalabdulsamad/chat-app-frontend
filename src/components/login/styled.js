@@ -7,7 +7,7 @@ const StyledLogin = styled.div`
 
 const StyledBack = styled(Link)`
     color: white;
-    text-decoration:none;
+    text-decoration: none;
     padding: 30px;
     display: inline-block;
 `;
@@ -16,7 +16,7 @@ const Form = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin:300px;
+    margin: 300px;
 `
 
 const Input = styled.input`

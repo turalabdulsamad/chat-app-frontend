@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from "../styled";
 import { StyledBack, Form, Label, Input, Button } from "../components/login/styled";
-import getUser from '../utils/Utils';
+import { getUser } from '../utils/Utils';
 
 
 const Login = () => {
@@ -28,10 +28,8 @@ const Login = () => {
             <Form onSubmit={handleSubmit}>
                 <Label htmlFor="welcome" text="welcome" >WELCOME TO HATUNA CHAT! </Label>
                 <Label htmlFor="username" text="username" >PLEASE ENTER YOUR USERNAME</Label>
-                <Input type="text" name="username"
-                ></Input>
-                <Button type="submit">
-                    SEND</Button>
+                <Input type="text" name="username"></Input>
+                <Button type="submit">SEND</Button>
             </Form>
         </Container>
     )
