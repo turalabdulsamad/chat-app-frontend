@@ -18,7 +18,7 @@ const MessagesWrapper = styled.div`
 const MessagesCell = styled.li`
     display:flex;
     flex-direction:column;
-     list-style-type: none;
+    list-style-type: none;
     border: 1px inset;
     padding: 5px 25px;
 `

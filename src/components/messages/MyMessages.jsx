@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { getMessages } from '../../utils/Utils';
 import { MessagesWrapper, MessagesCell, StyledUsername, StyledMessage } from "./styled"
 
 const MyMessages = (username) => {
     const [messages, setMessages] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
@@ -12,13 +15,19 @@ const MyMessages = (username) => {
         }
         fetchData();
     }, [username]);
+    const navigateToDirect = (from) => (event) => {
+        event.preventDefault();
+        navigate(`/direct/me=${username.username}/to=${from}`)
+    }
+
     return (
         <MessagesWrapper>
             <ul>
                 {messages.map((user) => (
-                    <MessagesCell key={user.id} >
+                    user?.message &&
+                    <MessagesCell key={user.id} onClick={navigateToDirect(username.username !== user.username1 ? user.username1 : user.username2)}>
                         <StyledUsername>
-                            {user.from}
+                            {username.username !== user.username1 ? user.username1 : user.username2}
                         </StyledUsername>
                         <StyledMessage>
                             {user.message}

@@ -25,7 +25,7 @@ const router = createBrowserRouter([
     element: <Messages />
   },
   {
-    path: "/direct/:username",
+    path: "/direct/:me/:to",
     element: <Direct />
   },
 ]);

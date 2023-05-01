@@ -1,3 +1,5 @@
+import WebSocket, { WebSocketServer } from 'ws';
+
 const getUser = async (data) => {
     try {
         const response = await fetch(`http://localhost:3001/users/${data.username}`, {
@@ -20,7 +22,6 @@ const getUser = async (data) => {
                 });
 
                 const responseData = await response.json();
-                console.log(responseData);
             } catch (error) {
                 console.error(error);
             }
@@ -50,4 +51,52 @@ const getMessages = async (username) => {
     }
 }
 
-export { getUser, getMessages };
+const getDirectMessages = async (from, to) => {
+    try {
+        const response = await fetch(`http://localhost:3001/messages`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "from": from,
+                    "to": to,
+                }),
+            });
+
+        const responseData = await response.json();
+
+        return responseData
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+
+const sendMessage = async (from, to, message) => {
+    try {
+        const response = await fetch(`http://localhost:3001/send-message`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "from": from,
+                    "to": to,
+                    "message": message
+                }),
+            });
+
+        const responseData = await response.json();
+
+        return responseData
+    }
+    catch (error) {
+        console.error(error);
+    }
+}
+
+export { getUser, getMessages, getDirectMessages, sendMessage };
