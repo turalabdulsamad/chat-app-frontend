@@ -3,14 +3,17 @@ import styled from "styled-components"
 
 const DirectHeader = styled.div`
     background-color: white;     
+    position: fixed;
+    z-index: 10000;
+    width:1400px;
 `
 
 const StyledChat = styled.div`
     background-color: purple;     
-    min-height: 86vh;
     position: relative;
     padding-top: 20px;
-`
+    margin-bottom:50px;
+`;
 
 const RightMessage = styled.div`
     background-color:white;
@@ -44,14 +47,24 @@ const LeftMessageWrapper = styled.div`
 `;
 
 const MessageInputWrapper = styled.div`
-    max-height: 4vh;
+    min-height: 5vh;
     background-color: white;
     display: flex;
     justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    width:1400px;
+
+    @media (max-width:991px) {
+        width: 400px;
+}
 `;
 
 const MessageInput = styled.input`
-    width:100%;
+   width: 1400px;
+   @media (max-width:991px) {
+    width: 400px;
+}
 `;
 
 const SendMessage = styled.button`

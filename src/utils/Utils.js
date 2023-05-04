@@ -1,5 +1,3 @@
-import WebSocket, { WebSocketServer } from 'ws';
-
 const getUser = async (data) => {
     try {
         const response = await fetch(`http://localhost:3001/users/${data.username}`, {
@@ -75,7 +73,7 @@ const getDirectMessages = async (from, to) => {
 }
 
 
-const sendMessage = async (from, to, message) => {
+const sendMessage = async (me, to, message) => {
     try {
         const response = await fetch(`http://localhost:3001/send-message`,
             {
@@ -84,7 +82,7 @@ const sendMessage = async (from, to, message) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    "from": from,
+                    "me": me,
                     "to": to,
                     "message": message
                 }),

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import Container from "../styled";
 import { StyledBack } from "../components/login/styled";
@@ -9,33 +9,47 @@ import {
 
 
 const Direct = () => {
-    const [liveMessages, setLiveMessages] = useState([]);
-    const [input, setInput] = useState('');
+    const me = window.location.href.split("/")[4].split("=")[1]
+    const to = window.location.href.split("/")[5].split("=")[1]
+
+    const [messages, setMessages] = useState([]);
+    const [liveMessages, setliveMessages] = useState('');
+    const [messageBoxValue, setMessageBoxValue] = useState('');
+    const ws = useRef(null);
+
+    const myMessageStyles = { color: "blue", display: "flex", flexDirection: 'column', alignItems: 'self-end' }
+    const yourMessageStyles = `style={color:"red", display:"flex",flexDirection:'column'}`
 
     useEffect(() => {
-        const socket = new WebSocket('ws://localhost:3002');
-        socket.onmessage = async event => {
-            const text = await event.data.text();
-            setLiveMessages(prevMessages => [...prevMessages, text]);
-        };
+        if ('WebSocket' in window) {
+            ws.current = new WebSocket('ws://localhost:3002');
+
+            ws.current.onmessage = async ({ data }) => {
+                let convertedText = await data.text()
+                setliveMessages((prevMessages) => `${prevMessages} <p>${convertedText}</p> `);
+
+            };
+        } else {
+            alert('ERROR: WebSocket is not supported in this browser!');
+        }
+
         return () => {
-            socket.close();
+            if (ws.current) {
+                ws.current.close();
+            }
         };
     }, []);
 
-    const handleChange = (event) => {
-        setInput(event.target.value);
+    const handleMessageSend = () => {
+        if (ws.current) {
+            ws.current.send(messageBoxValue);
+            setliveMessages((prevMessages) => `${prevMessages}  <p>${messageBoxValue}</p>  `);
+            setMessageBoxValue('');
+            sendMessage(me, to, messageBoxValue)
+        } else {
+            alert('ERROR: Not connected... refresh to try again!');
+        }
     };
-
-    const sendMessageEvent = (from, to, message) => (event) => {
-        event.preventDefault()
-        sendMessage(from, to, message)
-        setInput("");
-    };
-
-    const me = window.location.href.split("/")[4].split("=")[1]
-    const to = window.location.href.split("/")[5].split("=")[1]
-    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -55,22 +69,22 @@ const Direct = () => {
             </DirectHeader>
             <StyledChat>
                 {messages.map((message) =>
-                (message.from === me ? <LeftMessageWrapper key={message.id}> <LeftMessage >{message.message}</LeftMessage></LeftMessageWrapper> : <RightMessageWrapper key={message.id}> <RightMessage>{message.message}
-                </RightMessage>
-                </RightMessageWrapper>))
-                }
-                {liveMessages.map((message) => (message.from === me ? <LeftMessageWrapper key={message.id}> <LeftMessage >{message}</LeftMessage></LeftMessageWrapper> : <RightMessageWrapper key={message.id}> <RightMessage>{message}
-                </RightMessage>
+                (message.from === me ? <LeftMessageWrapper key={message.id}> <LeftMessage key={message.id} >
+                    {message.message}</LeftMessage></LeftMessageWrapper> : <RightMessageWrapper key={message.id}> <RightMessage key={message.id}>
+                        {message.message}
+                    </RightMessage>
                 </RightMessageWrapper>))}
+                <div dangerouslySetInnerHTML={{ __html: liveMessages }} style={myMessageStyles} />
             </StyledChat>
             <MessageInputWrapper>
-                <MessageInput type="text" name="message" id="message" value={input} placeholder='Type any message'
-                    onChange={handleChange}
-                ></MessageInput>
-                <SendMessage onClick={sendMessageEvent(to, me, input)}>Send</SendMessage>
+                <MessageInput type="text" name="message" id="message" placeholder='Type any message'
+                    value={messageBoxValue}
+                    onChange={(e) => setMessageBoxValue(e.target.value)} ></MessageInput>
+                <button id="send" onClick={handleMessageSend}
+                > Send</button>
             </MessageInputWrapper>
         </Container>
     )
-}
+};
 
 export default Direct;
